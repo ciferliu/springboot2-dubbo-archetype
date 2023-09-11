@@ -1,0 +1,98 @@
+server:
+   port: 8000
+   shutdown: "graceful"
+management:
+   server:
+      port: ${server.port}
+   endpoints:
+      web:
+         exposure:
+            include: "health,prometheus"
+   metrics:
+      tags:
+         application: ${spring.application.name}
+      export:
+         prometheus:
+            enabled: true
+mybatis:
+   mapper-locations: "classpath*:mybatis/*.xml"
+   type-aliases-package: "${package}.api.dto,;${package}.core.db.dataobject,;"
+   configuration:
+      map-underscore-to-camel-case: true
+dubbo:
+   application:
+      name: ${spring.application.name}
+   protocol:
+      name: dubbo
+      port: -1 # random port
+   scan:
+      base-packages: ${package}.core.biz
+   registry:
+      address: nacos://${spring.cloud.nacos.discovery.server-addr}
+      parameters:
+         namespace: ${spring.cloud.nacos.discovery.namespace}
+
+spring:
+   profiles:
+      active: "dev"
+   application:
+      name: ${parentArtifactId}
+   jackson:
+      default-property-inclusion: non_null
+      time-zone: "GMT+8"
+      date-format: "yyyy-MM-dd HH:mm:ss"
+   lifecycle:
+      timeout-per-shutdown-phase: "20s"
+   cloud:
+      nacos:
+         config:
+            server-addr: mse-65751220-nacos-ans.mse.aliyuncs.com:8848
+            group: ${spring.application.name}
+            file-extension: yaml
+         discovery:
+            server-addr: mse-65751220-nacos-ans.mse.aliyuncs.com:8848
+            metadata:
+               prometheus:
+                  port: ${management.server.port}
+                  job_name: ${spring.application.name}
+                  metrics_path: "/actuator/prometheus"
+
+---
+spring:
+   config:
+      activate:
+         on-profile: "dev"
+   cloud:
+      nacos:
+         config:
+            namespace: 6ce0a23a-859a-4c6b-b664-49bdc083461d
+         discovery:
+            namespace: 6ce0a23a-859a-4c6b-b664-49bdc083461d
+               
+
+---
+spring:
+   config:
+      activate:
+         on-profile: "test"
+   cloud:
+      nacos:
+         config:
+            namespace: 31fe5bd4-c168-44fa-881a-2b8bd81de720
+         discovery:
+            namespace: 31fe5bd4-c168-44fa-881a-2b8bd81de720
+
+---
+spring:
+   config:
+      activate:
+         on-profile: "prod"
+   cloud:
+      nacos:
+         config:
+            namespace: b0157a1d-80f0-423f-ae32-f5d082d3ac39
+         discovery:
+            namespace: b0157a1d-80f0-423f-ae32-f5d082d3ac39
+            
+            
+            

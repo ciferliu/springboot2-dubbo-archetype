@@ -1,0 +1,1 @@
+exceptionFilter=com.fourportun.common.exception.ExceptionFilterForDubbo
