@@ -46,11 +46,11 @@ spring:
    cloud:
       nacos:
          config:
-            server-addr: mse-65751220-nacos-ans.mse.aliyuncs.com:8848
+            server-addr: ip:port
             group: ${spring.application.name}
             file-extension: yaml
          discovery:
-            server-addr: mse-65751220-nacos-ans.mse.aliyuncs.com:8848
+            server-addr: ip:port
             metadata:
                prometheus:
                   port: ${management.server.port}
